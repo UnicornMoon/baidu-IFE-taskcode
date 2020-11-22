@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script defer="defer" src="./sourceDate.js"></script>
+    <script src="./bar.js"></script>
+    <script src="./line.js"></script>
+    <script src="./checkBox.js"></script>
+    <script src="./newTable.js"></script>
+</head>
+<style>
+    #bar-wrapper {
+        margin-top: 10px;
+    }
+    
+    #top {
+        display: inline-block;
+    }
+    
+    #wrapper {
+        display: inline-block;
+    }
+    
+    #bar-wrapper {
+        float: left;
+    }
+</style>
+
+<body>
+    <div id="top">
+        <span>请选择商品：</span>
+        <div id="product-input"></div>
+        <br>
+        <span>请选择地区：</span>
+        <div id="region-input"></div>
+    </div>
+    <div id="wrapper"></div>
+    <div id="wrapper-chart">
+        <div id="bar-wrapper"></div>
+        <canvas id="polyline-wrapper" height="515" width="500"></canvas>
+    </div>
+</body>
+
+</html>
