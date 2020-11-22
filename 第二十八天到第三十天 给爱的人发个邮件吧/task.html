@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        list-style-type: none;
+    }
+    
+    div {
+        width: 250px;
+    }
+    
+    ul {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .liChecked {
+        background-color: aquamarine;
+    }
+    
+    li:hover {
+        background-color: violet;
+    }
+</style>
+
+<body>
+    <div class="wrapper">
+        <input id="email-input" type="text">
+        <ul id="email-sug-wrapper" class="email-sug"></ul>
+    </div>
+    <script>
+        var postfixList = [
+            "163.com",
+            "gmail.com",
+            "126.com",
+            "qq.com",
+            "263.net",
+        ];
+        var inputDom = document.getElementById("email-input");
+        var list = document.getElementById("email-sug-wrapper");
+        list.onclick = function(ev) {
+            var e = ev || window.event;
+            var target = e.target || e.srcElement;
+            if (target.nodeName.toLowerCase() == "li") {
+                tipTxt = HtmlUtil.htmlDecode(target.innerHTML);
+            }
+            inputDom.value = tipTxt;
+            hideFrame();
+            inputDom.focus();
+        }
+        inputDom.oninput = function() {
+            var str = getInput();
+            addLi(str);
+            conDisplay();
+        }
+        window.onload = function() {
+            inputDom.focus();
+        }
+        inputDom.onkeydown = keyCode;
+
+        function userTrans() {
+            var content = inputDom.value.replace(/ /g, "");
+            content = content.replace(/<[^<>]+?>/g, ""); //删除所有html标签
+            return content;
+        }
+
+        function addLi(str) {
+            list.innerHTML = str;
+            var uLi = list.querySelectorAll("li");
+            if (uLi.length > 0) {
+                uLi[0].className = "liChecked";
+            }
+            console.log("将内容添加到了ul中")
+        }
+
+        function conDisplay() {
+            if (inputDom.value.trim() == "" || inputDom.value.length == 0) {
+                hideFrame();
+            } else {
+                showFrame();
+            }
+        }
+
+        function hideFrame() {
+            list.style.display = "none";
+        }
+
+        function showFrame() {
+            list.style.display = "block";
+        }
+
+        function getInput() {
+            var val = HtmlUtil.htmlEncode(userTrans());
+            var str = "";
+            var afterVal
+            var mark = val.indexOf('@'); //标记@位置
+            if (mark != -1) {
+                afterVal = val.slice(mark + 1);
+                val = val.slice(0, mark);
+            }
+            postfixList.forEach((value, index, arr) => {
+                if (mark == -1) { //没有输入@
+                    console.log("没有输入@")
+                    str += "<li>" + val + "@" + value + "</li>\n";
+                } else {
+                    //输入了@
+                    console.log("输入了@")
+                    if (value.indexOf(afterVal) != -1) //输入了@并且有能匹配的后缀
+                    {
+                        str += "<li>" + val + "@" + value + "</li>\n";
+                    } else if (
+                        arr[0].indexOf(afterVal) == -1 &&
+                        arr[1].indexOf(afterVal) == -1 &&
+                        arr[2].indexOf(afterVal) == -1 &&
+                        arr[3].indexOf(afterVal) == -1 &&
+                        arr[4].indexOf(afterVal) == -1
+                    ) {
+                        str += "<li>" + val + "@" + value + "</li>\n";
+                    }
+                }
+            });
+            return str;
+            console.log("已获取用户输入");
+        }
+
+        function keyCode(event) {
+            var e = event.keyCode;
+            var uLi = document.querySelectorAll("li");
+            var liChecked = 0;
+            var lastCheck = uLi.length;
+            uLi.forEach((value, index) => {
+                if (uLi[index].className == "liChecked")
+                    liChecked = index;
+            });
+            if (list.style.display == "block") {
+                switch (e) {
+                    case 13: //回车
+                        inputDom.value = HtmlUtil.htmlDecode(uLi[liChecked].innerHTML);
+                        hideFrame();
+                        break;
+                    case 27: //ESC
+                        hideFrame();
+                        inputDom.select();
+                        break;
+                    case 38: //上
+                        uLi[liChecked].className = ""; //清除选中
+                        if (liChecked != 0) //不是第一个
+                        {
+                            uLi[--liChecked].className = "liChecked";
+                        } else //是第一个
+                        {
+                            uLi[--lastCheck].className = "liChecked";
+                        }
+                        break;
+                    case 40: //下
+                        console.log("按了下")
+                        uLi[liChecked].className = "";
+                        if (liChecked != lastCheck - 1) { //不是最后一个
+                            uLi[++liChecked].className = "liChecked";
+                        } else { //是最后一个
+                            uLi[0].className = "liChecked";
+                        }
+                        break;
+
+
+
+                }
+            }
+        }
+
+        //对内容进行转码及解码 
+        var HtmlUtil = {
+            /*1.用浏览器内部转换器实现html转码*/
+            htmlEncode: function(html) {
+                //1.首先动态创建一个容器标签元素，如DIV
+                var temp = document.createElement("div");
+                //2.然后将要转换的字符串设置为这个元素的innerText(ie支持)或者textContent(火狐，google支持)
+                temp.textContent != undefined ?
+                    (temp.textContent = html) :
+                    (temp.innerText = html);
+                //3.最后返回这个元素的innerHTML，即得到经过HTML编码转换的字符串了
+                var output = temp.innerHTML;
+                temp = null;
+                console.log("解码了")
+                return output;
+            },
+            /*2.用浏览器内部转换器实现html解码*/
+            htmlDecode: function(text) {
+                //1.首先动态创建一个容器标签元素，如DIV
+                var temp = document.createElement("div");
+                //2.然后将要转换的字符串设置为这个元素的innerHTML(ie，火狐，google都支持)
+                temp.innerHTML = text;
+                //3.最后返回这个元素的innerText(ie支持)或者textContent(火狐，google支持)，即得到经过HTML解码的字符串了。
+                var output = temp.innerText || temp.textContent;
+                temp = null;
+                return output;
+            },
+        };
+    </script>
+</body>
+
+</html>
