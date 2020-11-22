@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #chef,
+    #customer,
+    #waiter {
+        display: inline-block;
+        position: absolute;
+    }
+    
+    #customer {
+        position: relative;
+        left: 850px;
+    }
+    
+    #waiter {
+        position: absolute;
+        left: 350px;
+    }
+    
+    #chef-talk {
+        width: 150px;
+        height: 35px;
+        background-color: pink;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+        display: inline-block;
+        /* visibility: hidden; */
+    }
+    
+    #chef-talk::before {
+        content: '';
+        border-right: 8px solid pink;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        position: absolute;
+        left: 105px;
+    }
+    
+    #customer-talk {
+        width: 200px;
+        height: 35px;
+        background-color: pink;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+        display: inline-block;
+        margin-left: 10px;
+    }
+    
+    #customer-talk::before {
+        content: '';
+        border-right: 8px solid pink;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        position: absolute;
+        left: 107px
+    }
+    
+    #waiter-talk {
+        /* float: left; */
+        position: relative;
+        top: 50px;
+        left: -120px;
+        width: 200px;
+        height: 35px;
+        background-color: pink;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+        display: inline-block;
+        /* margin-left: 10px; */
+    }
+    
+    #waiter-talk::before {
+        content: '';
+        border-bottom: 8px solid pink;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        position: absolute;
+        top: -7px;
+        left: 40px;
+    }
+    
+    li {
+        background-color: #00A4FF;
+        display: inline-block;
+        margin: 10px;
+        color: white;
+        padding: 10px;
+    }
+    
+    #cash {
+        position: absolute;
+        top: 400px;
+    }
+</style>
+
+<body>
+    <div id="chef">
+        <img id="chef-img" src="./img/chef.jpg" height="100" width="100">
+        <div id="chef-talk"></div>
+        <p>职位：厨师</p>
+        <p>状态：<span id="chef-status">空闲</span></p>
+        <p>剩余完成时间：<span id="dishtime"></span></p>
+        <p>待做：<span id="cooking"></span></p>
+    </div>
+    <div id="waiter">
+        <img src="./img/waiter.jpg" width="100 " height="100">
+        <div id="waiter-talk"></div>
+    </div>
+    <div id="customer">
+        <img id="customer-img " src="./img/cus.jfif" height="100 " width="100 ">
+        <div id="customer-talk"></div>
+        <p>顾客：<span id="customer-name"></span></p>
+        <p>状态：<span id="customer-status"></span>(剩余时间：<span id="ordertime"></span>)</p>
+        <p>菜单列表：<span id="order-menu"></span></p>
+    </div>
+    <p id="cash">餐厅现金：0</p>
+    <script src="./sourceData.js"></script>
+    <script src="./power.js"></script>
+    <script src="./main.js"></script>
+</body>
+
+</html>
