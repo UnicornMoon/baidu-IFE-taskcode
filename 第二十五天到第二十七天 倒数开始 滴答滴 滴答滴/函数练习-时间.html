@@ -1,0 +1,165 @@
+<html>
+
+<head>
+</head>
+
+<body onload="composition()">
+    <div>
+        <select id="year-select">
+        </select>
+        <span>年</span>
+        <select id="month-select">
+    
+    </select>
+        <span>月</span>
+        <select id="day-select">
+ 
+    </select>
+        <span>日</span>
+        <select id="hour-select">     
+    </select>
+        <span>时</span>
+        <select id="minite-select">
+    </select>
+        <span>分</span>
+        <select id="second-select">
+    </select>
+        <span>秒</span>
+        <p id="result-wrapper">现在距离 2001年1月1日星期X HH:MM:SS 还有 X 天 X 小时 X 分 X 秒</p>
+    </div>
+
+</body>
+<script>
+    // 有一堆Select用于选择日期和时间，在选择后，实时在 id 为 result-wrapper 的 p 标签中显示所选时间和当前时间的差值。
+    var divv = document.querySelector('div');
+    var y = document.getElementById('year-select');
+    var m = document.getElementById('month-select');
+    var d = document.getElementById('day-select');
+    var h = document.getElementById('hour-select');
+    var mm = document.getElementById('minite-select');
+    var ss = document.getElementById('second-select');
+    var select = document.querySelectorAll('option');
+    var result = document.getElementById('result-wrapper');
+    var theYear = 0;
+    var theMonth = 0;
+    var theDay = 0;
+    var theHour = 0;
+    var theMinutes = 0;
+    var theSecond = 0;
+    var theDay = 0;
+    var chooseday = new Date();
+    var today = new Date();
+    var arr = [];
+
+    // 获取周天
+    function getWeek(day) {
+        var weekday = ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+        return weekday[day];
+    }
+    // 获取月份
+    function getMonth(month) {
+        var Month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        return Month[month - 1];
+    }
+    // 获取选中的值
+    divv.onchange = function() {
+        specialDay();
+        cunrrentTime();
+    }
+
+    // 1. 补全省略号
+    function composition() { // 最后一位值都大一位，因为不会取到
+        composeChild(2001, 2034, y); // 补全年份
+        composeChild(1, 12, m); // 补全月份
+        // 天数根据选的月份和是否闰年不同
+        // composeChild(1, 30, d); // 补全天数
+        specialDay();
+        composeChild(0, 23, h); // 补全小时
+        composeChild(0, 59, mm); // 补全分钟
+        composeChild(0, 59, ss); // 补全秒
+        cunrrentTime();
+        /* result.innerHTML="现在距离"+theYear+"年"+theMonth+"月"+theDay+"日"+getWeek(chooseday.getDay())+" "+theHour+":"+theMinutes+":"+theSecond+"还有。。。"; */
+    }
+
+    // 1.1 调参数自动补全
+    function composeChild(start, end, parent) {
+        for (var i = start; i <= end; i++) {
+            var option = document.createElement('option');
+            if (i < 10) {
+                i = '0' + i;
+            }
+            option.setAttribute('value', i);
+            option.innerHTML = i
+            parent.appendChild(option);
+        }
+    }
+    // 1.2 获取当前选中的时间
+    function cunrrentTime() {
+        theYear = getSelect(y);
+        theMonth = getSelect(m);
+        theDay = getSelect(d);
+        theHour = getSelect(h);
+        theMinutes = getSelect(mm);
+        theSecond = getSelect(ss);
+        chooseday = settingTime(theYear, theMonth, theDay, theHour, theMinutes, theSecond);
+        var judgingArr = judgingDate(chooseday);
+        result.innerHTML = "现在距离" + theYear + "年" + theMonth + "月" + theDay + "日" + getWeek(chooseday.getDay()) + " " + theHour + ":" + theMinutes + ":" + theSecond +
+            judgingArr[0] + judgingArr[1] + "天" + judgingArr[2] + "小时" + judgingArr[3] + "分" + judgingArr[4] + "秒";
+    }
+
+    // 1.3 获取每个options下的selected
+    function getSelect(y) {
+        var options = y.getElementsByTagName('option');
+        for (var i = 0; i < options.length; i++) {
+            if (options[i].selected) {
+                return y.children[i].value;
+            }
+        }
+    }
+
+
+
+    // 1.4 设定完整时间
+    function settingTime(theYear, theMonth, theDay, theHour, theMinutes, theSecond) {
+        chooseday.setFullYear(theYear, theMonth - 1, theDay);
+        chooseday.setHours(theHour);
+        chooseday.setMinutes(theMinutes);
+        chooseday.setSeconds(theSecond);
+        return chooseday;
+    }
+
+    // 1.5 与现有时间判断
+    function judgingDate(chooseday) {
+        var choosing = chooseday.getTime();
+        var now = today.getTime();
+        var gap = Math.abs(now - choosing);
+        if (now > choosing) { // 所选时间早于现在
+            arr[0] = "已经过去";
+        } else {
+            arr[0] = "还有";
+        }
+        arr[1] = parseInt(gap / (1000 * 60 * 60 * 24)); // 天
+        arr[2] = parseInt(gap / (1000 * 60 * 60)); // 小时
+        arr[3] = parseInt(gap / (1000 * 60)); // 分
+        arr[4] = parseInt(gap / (1000)); // 秒
+        return arr;
+    }
+
+    // 1.6 天数根据选的月份和是否闰年不同
+    function specialDay() {
+        while (d.hasChildNodes && d.firstChild != null) {
+            d.removeChild(d.firstChild);
+        }
+        var tempYear = getSelect(y);
+        var tempMonth = getSelect(m);
+        if ((tempYear % 400 == 0 || tempYear % 4 == 0) && tempMonth == 2) { // 闰年   
+            console.log("闰年了")
+            composeChild(0, 29, d);
+        } else {
+            composeChild(0, getMonth(tempMonth), d);
+        }
+
+    }
+</script>
+
+</html>
