@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <label>String A:
+            <input id="radio-a" type="radio" checked="true" name="str-obj" value="a">
+        </label>
+        <textarea id="str-a"></textarea>
+        <label>String B:
+            <input id="radio-b" type="radio" name="str-obj" value="b">
+        </label>
+        <textarea id="str-b"></textarea>
+        <label>Num A：<input id="num-a" type="number" value="0"></label>
+        <label>Num B：<input id="num-b" type="number" value="1"></label>
+    </div>
+    <div>
+        <button>获取当前选中输入的内容长度</button>
+        <button>当前选中输入中的第3个字符</button>
+        <button>把两个输入框的文字连接在一起输出（concat）</button>
+        <button>输入B中的内容，在输入A的内容中第一次出现的位置（indexOf）</button>
+        <button>输入A中的内容，在输入B的内容中最后一次出现的位置（lastIndexOf）</button>
+        <button>使用slice获取选中输入框内容的部分内容，参数为num-a及num-b</button>
+        <button>当前选中输入框的行数</button>
+        <button>使用substr获取选中输入框内容的子字符串，参数为num-a及num-b</button>
+        <button>把所选输入框中的内容全部转为大写</button>
+        <button>把所选输入框中的内容全部转为小写</button>
+        <button>把所选输入框中内容的半角空格全部去除</button>
+        <button>把所选输入框中内容的a全部替换成另外一个输入框中的内容</button>
+    </div>
+    <p id="result"></p>
+
+    <script>
+        let numA = document.getElementById('num-a');
+        let numB = document.getElementById("num-b");
+        let radioA = document.getElementById("radio-a");
+        let radioB = document.getElementById("radio-b");
+        let strA = document.getElementById("str-a");
+        let strB = document.getElementById("str-b");
+        let buttons = document.getElementsByTagName("button"); //按钮数组
+        let p = document.getElementById("result");
+
+        //检查数字定义
+        function isNumber(num) {
+            if (!isNaN(num.value) && num.value !== '') {
+                return ture;
+            } else {
+                return false;
+            }
+        }
+        //定义勾选
+        function isCheck(x) {
+            if (x.checked) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+        //输入内容长度
+        buttons[0].addEventListener('click', function() {
+            if (isCheck(radioA)) {
+                p.innerHTML = '当前输入内容长度为：' + strA.value.length;
+            } else if (isCheck(radioB)) {
+                p.innerHTML = '当前输入内容长度为：' + strB.value.length;
+            }
+        });
+        //查找字符位置
+        buttons[1].addEventListener('click', function() {
+                if (isCheck(radioA)) {
+                    p.innerHTML = '第三个字符是：' + strA.value[2]
+                } else if (isCheck(radioB)) {
+                    p.innerHTML = '第三个字符是：' + strB.value[2];
+                }
+            })
+            //连接字符串
+        buttons[2].addEventListener('click', function() {
+                strA.value = strA.value.concat(strB.value);
+                p.innerHTML = '将两个字符串连起来为：' + strA.value;
+            })
+            //查找特定字符第一次出现位置
+        buttons[3].addEventListener('click', function() {
+                let search = strA.value.indexOf(strB.value);
+                p.innerHTML = 'B在A中出现的第一次位置为：' + (search + 1);
+            })
+            //查找特定字符最后出现位置
+        buttons[4].addEventListener('click', function() {
+                let search = strB.value.lastIndexOf(strA.value);
+                p.innerHTML = 'A在B中出现的最后一次位置为：' + (search + 1)
+            })
+            //获取输入框的部分内容
+        buttons[5].addEventListener('click', function() {
+                if (isCheck(radioA)) {
+                    p.innerHTML = '被截取字符为：' + strA.value.slice(numA.value, numB.value);
+                } else if (isCheck(radioB)) {
+                    p.innerHTML = '被截取字符为：' + strB.value.slice(numA.value, numB.value);
+                }
+            })
+            //当前选中输入框的行数
+        buttons[6].addEventListener('click', function() {
+                if (isCheck(radioA)) {
+                    p.innerHTML = "当前选中输入框的行数为：" + strA.value.split(/\r?\n|\r/).length; //window是\r\n(回车换行),mac是\r（回车）
+                } else if (isCheck(radioB)) {
+                    p.innerHTML = "当前选中输入框的行数为：" + strB.value.split(/\r?\n|\r/).length; //？匹配0或1次
+                }
+            })
+            //截取字符串
+        buttons[7].addEventListener('click', function() {
+                if (isCheck(radioA)) {
+                    p.innerHTML = '被截取的字符串为：' + strA.value.substr(numA.value, numB.value);
+                } else if (isCheck(radioB)) {
+                    p.innerHTML = '被截取的字符串为：' + strB.value.substr(numA.value, numB.value);
+                }
+            })
+            //把所选内容转成大写
+        buttons[8].addEventListener('click', function() {
+                if (isCheck(radioA)) {
+                    p.innerHTML = '转成大写后为：' + strA.value.toUpperCase();
+                } else if (isCheck(radioB)) {
+                    p.innerHTML = '转成大写后为：' + strB.value.toUpperCase();
+                }
+            })
+            //转小写
+        buttons[9].addEventListener('click', function() {
+                if (isCheck(radioA)) {
+                    p.innerHTML = '转成小写后为：' + strA.value.toLowerCase();
+                } else if (isCheck(radioB)) {
+                    p.innerHTML = '转成小写后为：' + strB.value.toLowerCase();
+                }
+            })
+            //去掉半角空格
+        buttons[10].addEventListener('click', function() {
+                if (isCheck(radioA)) {
+                    p.innerHTML = "选中半角空格全部去除为：" + strA.value.replace(/\s+/g, "");
+                    //全局匹配一次或多次S（匹配任何空白字符，包括空格、制表符、换页符等等。）
+                }
+                if (isCheck(radioB)) {
+                    p.innerHTML = "选中半角空格全部去除为：" + strB.value.replace(/\s+/g, "");
+                }
+            })
+            //把A替换成B
+        buttons[11].addEventListener('click', function() {
+                p.innerHTML = '将A替换为B得：' + strA.value.replace(strA.value, strB.value);
+            })
+            /*
+            实现一个字符串头尾去除空格的函数
+            注意需要去除的空格，包括全角、半角空格
+            暂时不需要学习和使用正则表达式的方式
+            */
+        function diyTrim(str) {
+            var result = "";
+            // do something
+            result = str.trim();
+            return result
+        }
+        // 测试用例
+        a = ' a f b    ';
+        console.log(diyTrim(a))
+        console.log(diyTrim(' a f b    ')); // ->a f b
+        console.log(diyTrim('    ffdaf    ')); // ->ffdaf
+        console.log(diyTrim('1    ')); // ->1
+        console.log(diyTrim('　　f')); // ->f
+        console.log(diyTrim('  　  a f b 　　 ')); // ->a f b
+        console.log(diyTrim(' ')); // ->
+        console.log(diyTrim('　')); // ->
+        console.log(diyTrim('')); // ->
+
+        /*
+        去掉字符串str中，连续重复的地方
+        */
+        function removeRepetition(str) {
+            // do something
+            if (str !== '') {
+                var result = str[0];
+                for (let i = 1; i < str.length; i++) {
+                    if (str[i] !== str[i - 1]) {
+                        result += str[i];
+                    }
+                }
+            } else
+                result = '';
+            return result;
+        }
+        // 测试用例
+        console.log(removeRepetition("aaa")); // ->a
+        console.log(removeRepetition("abbba")); // ->aba
+        console.log(removeRepetition("aabbaabb")); // ->abab
+        console.log(removeRepetition("")); // ->
+        console.log(removeRepetition("abc")); // ->abc
+    </script>
+</body>
+
+</html>
