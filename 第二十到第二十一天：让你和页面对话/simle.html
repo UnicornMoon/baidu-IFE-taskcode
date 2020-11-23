@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eriksmile(sprites)</title>
+    <style>
+        #smile {
+            background: url('erik_smile.jpg');
+            width: 480px;
+            height: 480px;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='smile'></div>
+    <script>
+        window.onload = function() {
+            var y = document.getElementById('smile');
+            var Y = 0;
+
+            function up() {
+                y.style.backgroundPositionY = '-' + Y + 'px';
+                Y += 480;
+
+                if (Y == 8160) {
+                    Y = 0;
+                }
+            }
+            setInterval(up, 100);
+        }
+    </script>
+</body>
+
+</html>
