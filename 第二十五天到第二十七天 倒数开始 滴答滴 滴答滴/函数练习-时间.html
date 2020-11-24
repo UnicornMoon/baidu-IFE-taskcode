@@ -71,9 +71,7 @@
     function composition() { // 最后一位值都大一位，因为不会取到
         composeChild(2001, 2034, y); // 补全年份
         composeChild(1, 12, m); // 补全月份
-        // 天数根据选的月份和是否闰年不同
-        // composeChild(1, 30, d); // 补全天数
-        specialDay();
+        Day();
         composeChild(0, 23, h); // 补全小时
         composeChild(0, 59, mm); // 补全分钟
         composeChild(0, 59, ss); // 补全秒
@@ -146,10 +144,7 @@
     }
 
     // 1.6 天数根据选的月份和是否闰年不同
-    function specialDay() {
-        while (d.hasChildNodes && d.firstChild != null) {
-            d.removeChild(d.firstChild);
-        }
+    function Day() {
         var tempYear = getSelect(y);
         var tempMonth = getSelect(m);
         if ((tempYear % 400 == 0 || tempYear % 4 == 0) && tempMonth == 2) { // 闰年   
