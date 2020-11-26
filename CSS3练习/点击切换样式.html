@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    h1 {
+        color: skyblue;
+        text-align: center;
+    }
+    
+    input {
+        display: block;
+        margin: auto;
+        margin-top: 30px;
+    }
+    
+    .trans {
+        width: 4px;
+        height: 0px;
+        margin: auto;
+    }
+    
+    .trans::after {
+        position: absolute;
+        top: 70px;
+        content: "";
+        width: 2px;
+        height: 5px;
+        transform: translateX(-50%);
+        transition: width 0.5s;
+        background-color: skyblue;
+    }
+    
+    .active::after {
+        width: 100px;
+    }
+</style>
+
+<body>
+    <h1>周星星</h1>
+    <div class="trans"></div>
+    <input type="button" value="切换样式">
+    <script>
+        var t = document.getElementsByClassName("trans");
+        var btn = document.getElementsByTagName("input")[0];
+        console.log(t)
+
+        function cl() {
+            console.log("a")
+            var name = t[0].classList;
+            if (name.value.indexOf("active") !== -1) {
+                name.remove("active");
+            } else {
+                name.add("active");
+            }
+        }
+        btn.addEventListener("click", cl, false);
+    </script>
+</body>
+
+</html>
